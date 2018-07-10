@@ -1,2 +1,13 @@
 # Docker-OnlyOffice
 Docker OnlyOffice
+* ports:
+    - "9443:443"
+    - "980:80"
+* volumes:
+    - ./logs:/var/log/onlyoffice
+    - ./data:/var/www/onlyoffice/Data
+    - ./fonts:/usr/share/fonts/truetype/custom
+    - ./forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
+    - ./lib:/var/lib/onlyoffice
+    - ./db:/var/lib/postgresql
+    - ./www:/var/www
