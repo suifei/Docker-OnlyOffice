@@ -8,12 +8,12 @@ services:
       - "980:80"
     volumes:
       - ./log/:/var/log/onlyoffice:rw
-      - ./onlyoffice/www/:/var/www/:rw
+      - ./onlyoffice/:/var/www/:rw
     networks:
       - net-onlyoffice
   nginx:
     image: nginx:alpine
-    container_name: dnmp-nginx
+    container_name: onlyoffice-nginx
     ports:
       - "9980:980"
       - "99443:9443"
@@ -23,6 +23,7 @@ services:
       - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./log/:/var/log/dnmp/:rw
     networks:
-      - net-php
+      - net-nginx
 networks:
   net-onlyoffice:
+  net-nginx:
