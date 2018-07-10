@@ -1,29 +1,32 @@
 version: "3"
 services:
   docsrv:
-    image: onlyoffice/documentserver
+    image: onlyoffice/documentserver:latest
     container_name: onlyoffice
     ports:
       - "9443:443"
       - "980:80"
     volumes:
-      - ./log/:/var/log/onlyoffice:rw
-      - ./onlyoffice/:/var/www/:rw
+      - ./logs:/var/log/onlyoffice
+      - ./data:/var/www/onlyoffice/Data
+      - ./fonts:/usr/share/fonts/truetype/custom
+      - ./forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
+      - ./lib:/var/lib/onlyoffice
+      - ./db:/var/lib/postgresql
+      - ./www:/var/www
+    environment:
+      - ONLYOFFICE_HTTPS_HSTS_ENABLED=false
+      #- SSL_CERTIFICATE_PATH=/var/www/onlyoffice/Data/certs/onlyoffice.crt
+      #- SSL_KEY_PATH=/var/www/onlyoffice/Data/certs/onlyoffice.key
+      #- SSL_DHPARAM_PATH=dhparam.pem
+      #- SSL_VERIFY_CLIENT=false
+
     networks:
       - net-onlyoffice
-  nginx:
-    image: nginx:alpine
-    container_name: onlyoffice-nginx
-    ports:
-      - "9980:980"
-      - "99443:9443"
-    volumes:
-      - ./www/:/var/www/html/:rw
-      - ./conf/conf.d:/etc/nginx/conf.d/:ro
-      - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./log/:/var/log/dnmp/:rw
-    networks:
-      - net-nginx
+    stdin_open: true
+    tty: true
+    restart: always
+
 networks:
   net-onlyoffice:
-  net-nginx:
+    driver: 'bridge'
